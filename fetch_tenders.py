@@ -82,7 +82,7 @@ def fetch_from_data_gov(target_date: str) -> list[dict]:
 def fetch_from_pcc_xml() -> list[dict]:
     """從電子採購網官方 XML 抓取"""
     tenders = []
-    xml_url = "https://web.pcc.gov.tw/prkms/tender/common/bulletion/readBulletionXml"
+    xml_url = "https://web.pcc.gov.tw/prkms/tender/common/bulletion/indexBulletion"
     try:
         req = urllib.request.Request(xml_url, headers=HEADERS)
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -180,7 +180,7 @@ def send_email(subject: str, html_body: str):
 
 
 def main():
-    target_date = (date.today() - timedelta(days=1)).strftime("%Y-%m-%d")
+    target_date = (date.today() - timedelta(days=0)).strftime("%Y-%m-%d")
     print(f"[INFO] 查詢日期：{target_date}")
     all_tenders = fetch_tenders(target_date)
     print(f"[INFO] 共取得 {len(all_tenders)} 筆")
