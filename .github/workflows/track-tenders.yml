@@ -1,0 +1,28 @@
+name: Track Tender Status Daily
+
+on:
+  schedule:
+    # 每天台灣時間 09:00 執行（UTC 01:00）
+    - cron: "0 1 * * *"
+  workflow_dispatch: {}  # 允許手動點按執行，方便測試
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run tender tracker
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+        run: python fetch_tenders.py
